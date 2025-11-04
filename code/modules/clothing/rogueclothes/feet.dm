@@ -25,7 +25,7 @@
 	max_integrity = 80
 	sewrepair = TRUE
 	salvage_amount = 1
-	armor = ARMOR_BOOTS_BAD
+	armor = ARMOR_CLOTHING
 	var/atom/movable/holdingknife = null
 	var/atom/movable/holdinglockpick = null
 
