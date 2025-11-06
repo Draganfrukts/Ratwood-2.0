@@ -32,15 +32,7 @@ export const ExaminePanel = (props) => {
   return (
     <Window title={character_name} width={1000} height={700} buttons={
       <>
-      {!!is_vet && (
-        <Button
-          color="gold"
-          icon="crown"
-          tooltip="This player is age-verified!"
-          tooltipPosition="bottom-start"
-          onClick={() => act('vet_chat')}
-        />
-      )}
+      {!!is_vet}
       <Button
       color="green"
       icon="music"
