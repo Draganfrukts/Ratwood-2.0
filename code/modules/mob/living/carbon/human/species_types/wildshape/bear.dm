@@ -20,7 +20,7 @@
 
 		src.STASTR = 14 //Might be too high, but then again you're a bear, and you gotta wrestle
 		src.STACON = 12 // One less than saiga
-		src.STAEND = 12
+		src.STAWIL = 12
 		src.STAPER = 10
 		src.STASPD = 6 // You are a hulking mass of muscle, and this is for balance reasons
 
