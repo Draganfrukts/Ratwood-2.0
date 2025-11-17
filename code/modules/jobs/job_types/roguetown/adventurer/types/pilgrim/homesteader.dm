@@ -43,11 +43,13 @@
 	"Homesteader", "Homesteadress",
 	"Householder", "Househusband", "Housewife",
 	"Laborer",
+	"Nurse", "Nun",
 	"Pioneer",
 	"Settler",
 	"Tradesperson",
 	"Villager",
-	"Woodsman", "Woodswoman")
+	"Woodsman", "Woodswoman",
+	"Chirurgeon")
 	var/cosmetic_choice = input(H, "Select your cosmetic title.", "Cosmetic Titles") as anything in cosmetic_titles
 
 	switch(cosmetic_choice)
@@ -141,6 +143,15 @@
 		if("Forager")
 			to_chat(H, span_notice("You are a Forager, gathering from the wilds."))
 			H.mind.cosmetic_class_title = "Forager"
+		if("Nurse")
+			to_chat(H, span_notice("You are a Nurse, caring for the sick and wounded."))
+			H.mind.cosmetic_class_title = "Nurse"
+		if("Nun")
+			to_chat(H, span_notice("You are a Nun, devoted to faith and service."))
+			H.mind.cosmetic_class_title = "Nun"
+		if("Chirurgeon")
+			to_chat(H, span_notice("You are a Chirurgeon, skilled in surgical arts and healing."))
+			H.mind.cosmetic_class_title = "Chirurgeon"
 
 
 	// STAT PACK SELECTION
@@ -148,11 +159,11 @@
 	var/stat_choice = input(H, "Select your stat focus. [1/1]", "Stat Pack Selection") as anything in stat_packs
 
 	switch(stat_choice)
-		if("Agile - SPD +2, CON +1, STR -2, WIL -2")
+		if("Agile - SPD +2, CON +1, STR -1, WIL -1")
 			to_chat(H, span_notice("You are agile and nimble."))
 			H.change_stat(STATKEY_SPD, 2)
-			H.change_stat(STATKEY_WIL, -2)
-			H.change_stat(STATKEY_STR, -2) 
+			H.change_stat(STATKEY_WIL, -1)
+			H.change_stat(STATKEY_STR, -1) 
 			H.change_stat(STATKEY_CON, 1)
 		if("Bookworm - INT +1, PER +1, WIL +1, STR -2, CON -2")
 			to_chat(H, span_notice("You are learned and wise."))
@@ -161,13 +172,12 @@
 			H.change_stat(STATKEY_WIL, 1)
 			H.change_stat(STATKEY_STR, -2)
 			H.change_stat(STATKEY_CON, -2)
-		if("Toned - STR +1, CON +1, WIL +1, INT -1, SPD -1")
+		if("Toned - STR +1, CON +1, WIL +1, INT -1")
 			to_chat(H, span_notice("You are strong and hardy."))
 			H.change_stat(STATKEY_STR, 1)
 			H.change_stat(STATKEY_CON, 1)
 			H.change_stat(STATKEY_WIL, 1)
 			H.change_stat(STATKEY_INT, -1)
-			H.change_stat(STATKEY_SPD, -1)
 		if("All-Rounded - No Changes")
 			to_chat(H, span_notice("You are balanced in all aspects."))
 			// No stat changes for all-rounded
@@ -187,14 +197,15 @@
 		"Copper Lamellar Cap" = /obj/item/clothing/head/roguetown/helmet/coppercap,
 		"Copper Messer" = /obj/item/rogueweapon/sword/short/messer/copper,
 		"Copper Rhomphaia" = /obj/item/rogueweapon/sword/long/rhomphaia/copper,
-		"Copper Spear" = /obj/item/rogueweapon/spear/stone/copper
+		"Copper Spear" = /obj/item/rogueweapon/spear/stone/copper,
+
+		"Recurve Bow" = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve,
+		"Quiver (Arrows)" = /obj/item/quiver/arrows
 	)
 
 	// Bronze and Copper Daily Tools - preset combinations (Axe + Dagger/Knife + Sheath)
 	var/daily_tools_combos = list(
-		"Bronze Axe + Bronze Dagger + Sheath" = list(/obj/item/rogueweapon/stoneaxe/woodcut/bronze, /obj/item/rogueweapon/huntingknife/bronze, /obj/item/rogueweapon/scabbard/sheath),
 		"Bronze Axe + Bronze Knife + Sheath" = list(/obj/item/rogueweapon/stoneaxe/woodcut/bronze, /obj/item/rogueweapon/huntingknife/bronze, /obj/item/rogueweapon/scabbard/sheath),
-		"Copper Hatchet + Copper Dagger + Sheath" = list(/obj/item/rogueweapon/stoneaxe/handaxe/copper, /obj/item/rogueweapon/huntingknife/copper, /obj/item/rogueweapon/scabbard/sheath),
 		"Copper Hatchet + Copper Knife + Sheath" = list(/obj/item/rogueweapon/stoneaxe/handaxe/copper, /obj/item/rogueweapon/huntingknife/copper, /obj/item/rogueweapon/scabbard/sheath)
 	)
 
@@ -215,8 +226,11 @@
 		"Scissors" = /obj/item/rogueweapon/huntingknife/scissors,
 		"Surgery Bag" = /obj/item/storage/belt/rogue/surgery_bag/full,
 		"Great Weapon Strap" = /obj/item/rogueweapon/scabbard/gwstrap,
+		"Medicine Pouch" = /obj/item/storage/belt/rogue/pouch/medicine,
+		"Food Bag" = /obj/item/storage/roguebag/food,
 
 		"Diagnose Spell" = /obj/effect/proc_holder/spell/invoked/diagnose/secular,
+		"Appraise Spell" = /obj/effect/proc_holder/spell/invoked/appraise/secular,
 		"Find Familiar Spell" = /obj/effect/proc_holder/spell/self/findfamiliar,
 		"Take Apprentice Spell" = /obj/effect/proc_holder/spell/invoked/takeapprentice
 	)
@@ -237,12 +251,27 @@
 			var/bronze_copper_name = input(H, "Choose a bronze or copper item [i]/3.", "Bronze/Copper Items") as anything in bronze_copper_items
 			if(bronze_copper_name)
 				H.mind.special_items[bronze_copper_name] = bronze_copper_items[bronze_copper_name]
+				// Grant APPRENTICE level skill for bronze/copper weapons
+				switch(bronze_copper_name)
+					if("Bronze Arming Sword", "Copper Messer", "Copper Rhomphaia")
+						H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_APPRENTICE, TRUE)
+					if("Bronze Katar", "Bronze Knuckles")
+						H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, SKILL_LEVEL_APPRENTICE, TRUE)
+						H.adjust_skillrank_up_to(/datum/skill/combat/wrestling, SKILL_LEVEL_APPRENTICE, TRUE)
+					if("Bronze Mace", "Copper Cudgel")
+						H.adjust_skillrank_up_to(/datum/skill/combat/maces, SKILL_LEVEL_APPRENTICE, TRUE)
+					if("Bronze Spear", "Copper Spear")
+						H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_APPRENTICE, TRUE)
+					if("Bronze Whip")
+						H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, SKILL_LEVEL_APPRENTICE, TRUE)
+					if("Recurve Bow", "Quiver (Arrows)")
+						H.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_NOVICE, TRUE)
 				if(bronze_copper_name in bronze_copper_items)
 					bronze_copper_items -= bronze_copper_name
 
 		// Select three utility/knowledge items
-		for(var/i in 1 to 5)
-			var/utility_name = input(H, "Choose a Utility Apparatus or Knowledge item [i]/5.", "Utility & Knowledge") as anything in utility_knowledge_items
+		for(var/i in 1 to 7)
+			var/utility_name = input(H, "Choose a Utility Apparatus or Knowledge item [i]/7.", "Utility & Knowledge") as anything in utility_knowledge_items
 			if(utility_name)
 				var/item_path = utility_knowledge_items[utility_name]
 				if(ispath(item_path, /obj/effect/proc_holder/spell))
@@ -284,7 +313,6 @@
 
 	belt = /obj/item/storage/belt/rogue/leather
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/mid
-	beltl = /obj/item/flashlight/flare/torch/lantern
 	backl = /obj/item/storage/backpack/rogue/backpack
 
 //Debloats their contents
@@ -324,7 +352,6 @@
 		var/craft_skills = list(
 			"Sewing" = /datum/skill/craft/sewing,
 			"Ceramics" = /datum/skill/craft/ceramics,
-			"Crafting" = /datum/skill/craft/crafting,
 			"Carpentry" = /datum/skill/craft/carpentry,
 			"Masonry" = /datum/skill/craft/masonry,
 			"Engineering" = /datum/skill/craft/engineering,
@@ -398,8 +425,8 @@
 					combat_skills -= apprentice_name
 
 		// Select four skills to NOVICE
-		for(var/i in 1 to 4)
-			var/novice_name = input(H, "Choose a skill to NOVICE. [i]/4", "Skill Selection") as anything in misc_skills + labor_skills + craft_skills + combat_skills
+		for(var/i in 1 to 6)
+			var/novice_name = input(H, "Choose a skill to NOVICE. [i]/6", "Skill Selection") as anything in misc_skills + labor_skills + craft_skills + combat_skills
 			if(novice_name)
 				H.adjust_skillrank_up_to(misc_skills[novice_name] || labor_skills[novice_name] || craft_skills[novice_name] || combat_skills[novice_name], SKILL_LEVEL_NOVICE, TRUE)
 				if(novice_name in misc_skills)
@@ -416,7 +443,8 @@
 		var/skill_unlock_traits = list(
 			"Homestead Expert" = TRAIT_HOMESTEAD_EXPERT,
 			"Alchemy Expert" = TRAIT_ALCHEMY_EXPERT,
-			"Survival Expert" = TRAIT_SURVIVAL_EXPERT
+			"Survival Expert" = TRAIT_SURVIVAL_EXPERT,
+			"Sewing Expert" = TRAIT_SEWING_EXPERT
 		)
 		
 		// Non-skill-locking traits
@@ -427,6 +455,8 @@
 			"Native Of the Land" = TRAIT_AZURENATIVE,
 			"Light Step" = TRAIT_LIGHT_STEP,
 			"Perfect Tracker" = TRAIT_PERFECT_TRACKER,
+			"Woodsman" = TRAIT_WOODSMAN,
+			"Seed Knowledge" = TRAIT_SEEDKNOW,
 
 			"Dyes Master" = TRAIT_DYES, // More RP centric stuff
 			"Intellectual" = TRAIT_INTELLECTUAL,
@@ -438,16 +468,17 @@
 			"Keen Ears" = TRAIT_KEENEARS
 		)
 
-		// Select one skill-unlocking trait
-		var/skill_trait_name = input(H, "Choose one skill-unlocking trait. [1/1]", "Trait Selection") as anything in skill_unlock_traits
-		if(skill_trait_name)
-			ADD_TRAIT(H, skill_unlock_traits[skill_trait_name], TRAIT_GENERIC)
-			if(skill_trait_name in skill_unlock_traits)
-				skill_unlock_traits -= skill_trait_name
+		// Select two skill-unlocking traits
+		for(var/i in 1 to 2)
+			var/skill_trait_name = input(H, "Choose a skill-unlocking trait [i]/2.", "Trait Selection") as anything in skill_unlock_traits
+			if(skill_trait_name)
+				ADD_TRAIT(H, skill_unlock_traits[skill_trait_name], TRAIT_GENERIC)
+				if(skill_trait_name in skill_unlock_traits)
+					skill_unlock_traits -= skill_trait_name
 
-		// Select three regular traits
-		for(var/i in 1 to 3)
-			var/regular_trait_name = input(H, "Choose a trait [i]/3.", "Trait Selection") as anything in regular_traits
+		// Select four regular traits
+		for(var/i in 1 to 4)
+			var/regular_trait_name = input(H, "Choose a trait [i]/4.", "Trait Selection") as anything in regular_traits
 			if(regular_trait_name)
 				ADD_TRAIT(H, regular_traits[regular_trait_name], TRAIT_GENERIC)
 				if(regular_trait_name in regular_traits)
