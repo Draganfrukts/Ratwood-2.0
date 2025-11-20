@@ -75,7 +75,7 @@
 
 /datum/advclass/knight/heavy
 	name = "Heavy Knight"
-	tutorial = "You've trained thoroughly and hit far harder than most - adept with massive swords, axes, maces, and polearms. People may fear the mounted knights, but they should truly fear those who come off their mount..."
+	tutorial = "You've trained thoroughly and hit far harder than most - masterfully proficient in swords, axes, maces or polearms. People may fear the mounted knights, but they should truly fear those who come off their mount..."
 	outfit = /datum/outfit/job/roguetown/knight/heavy
 
 	category_tags = list(CTAG_ROYALGUARD)
@@ -88,7 +88,7 @@
 		STATKEY_SPD = -1
 	)
 	subclass_skills = list(
-		/datum/skill/combat/polearms = SKILL_LEVEL_MASTER, //Polearms are pretty much explicitly a two-handed weapon, so I gave them a polearm option.
+		/datum/skill/combat/polearms = SKILL_LEVEL_JOURNEYMAN, //Polearms are pretty much explicitly a two-handed weapon, so I gave them a polearm option.
 		/datum/skill/combat/swords = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/axes = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/maces = SKILL_LEVEL_JOURNEYMAN,
@@ -116,22 +116,29 @@
 			if("Claymore")
 				r_hand = /obj/item/rogueweapon/greatsword/zwei
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
-			if("Great Mace")
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
+			if("Grand Mace")
 				r_hand = /obj/item/rogueweapon/mace/goden/steel
+				H.adjust_skillrank_up_to(/datum/skill/combat/maces, SKILL_LEVEL_MASTER, TRUE)
 			if("Battle Axe")
 				r_hand = /obj/item/rogueweapon/stoneaxe/battle
+				H.adjust_skillrank_up_to(/datum/skill/combat/axes, SKILL_LEVEL_MASTER, TRUE)
 			if("Greataxe")
 				r_hand = /obj/item/rogueweapon/greataxe/steel
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
+				H.adjust_skillrank_up_to(/datum/skill/combat/axes, SKILL_LEVEL_MASTER, TRUE)
 			if("Estoc")
 				r_hand = /obj/item/rogueweapon/estoc
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
 			if("Lucerne")
 				r_hand = /obj/item/rogueweapon/eaglebeak/lucerne
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
+				H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_MASTER, TRUE)
 			if("Partizan")
 				r_hand = /obj/item/rogueweapon/spear/partizan
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
+				H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_MASTER, TRUE)
 
 	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	pants = /obj/item/clothing/under/roguetown/chainlegs
@@ -171,7 +178,7 @@
 
 /datum/advclass/knight/footknight
 	name = "Foot Knight"
-	tutorial = "You are accustomed to traditional foot-soldier training in one-handed weapons such as flails, swords, and maces. Your fortitude and mastery with the versatile combination of a shield and weapon makes you a fearsome opponent to take down!"
+	tutorial = "You are accustomed to traditional foot-soldiery, masterfully proficient in swords, flails, or maces. Your fortitude and mastery with the versatile combination of a shield and weapon makes you a fearsome opponent to take down!"
 	outfit = /datum/outfit/job/roguetown/knight/footknight
 
 	category_tags = list(CTAG_ROYALGUARD)
@@ -183,9 +190,9 @@
 		STATKEY_WIL = 3,
 	)
 	subclass_skills = list(
-		/datum/skill/combat/swords = SKILL_LEVEL_MASTER,
+		/datum/skill/combat/swords = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/whipsflails = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/maces = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/maces = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/shields = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/riding = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/wrestling = SKILL_LEVEL_EXPERT,
@@ -204,20 +211,24 @@
 
 	H.adjust_blindness(-3)
 	if(H.mind)
-		var/weapons = list("Longsword","Flail","Warhammer","Sabre")
+		var/weapons = list("Longsword", "Flail", "Warhammer","Sabre")
 		var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 		H.set_blindness(0)
 		switch(weapon_choice)
 			if("Longsword")
 				beltl = /obj/item/rogueweapon/scabbard/sword
 				l_hand = /obj/item/rogueweapon/sword/long
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
 			if("Flail")
-				beltr = /obj/item/rogueweapon/flail/sflail
+				l_hand = /obj/item/rogueweapon/flail/sflail
+				H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, SKILL_LEVEL_MASTER, TRUE)
 			if ("Warhammer")
 				beltr = /obj/item/rogueweapon/mace/warhammer //Iron warhammer. This is one-handed and pairs well with shields. They can upgrade to steel in-round.
+				H.adjust_skillrank_up_to(/datum/skill/combat/maces, SKILL_LEVEL_MASTER, TRUE)
 			if("Sabre")
 				beltl = /obj/item/rogueweapon/scabbard/sword
 				l_hand = /obj/item/rogueweapon/sword/sabre
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
 
 	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	pants = /obj/item/clothing/under/roguetown/chainlegs
@@ -257,7 +268,7 @@
 
 /datum/advclass/knight/mountedknight
 	name = "Mounted Knight"
-	tutorial = "You are the picture-perfect knight from a high tale, knowledgeable in riding steeds into battle. You specialize in weapons most useful on a saiga including spears, swords, maces, and a variety of ranged weaponry."
+	tutorial = "You are the picture-perfect knight from a high tale, knowledgeable in riding steeds into battle. You specialize in weapons most useful on a saiga including swords, polearms, and bows."
 	outfit = /datum/outfit/job/roguetown/knight/mountedknight
 	horse = /mob/living/simple_animal/hostile/retaliate/rogue/saiga/saigabuck/tame/saddled
 
@@ -273,7 +284,7 @@
 		STATKEY_PER = 2
 	)
 	subclass_skills = list(
-		/datum/skill/combat/polearms = SKILL_LEVEL_MASTER,
+		/datum/skill/combat/polearms = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/swords = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/maces = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/riding = SKILL_LEVEL_EXPERT,
@@ -310,24 +321,33 @@
 				r_hand = /obj/item/rogueweapon/sword/long
 				beltr = /obj/item/quiver/bolts
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/crossbows, SKILL_LEVEL_EXPERT, TRUE)
 			if("Billhook + Recurve Bow")
 				r_hand = /obj/item/rogueweapon/spear/billhook
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
 				beltr = /obj/item/quiver/arrows
 				beltl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+				H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_EXPERT, TRUE)
 			if("Grand Mace + Longbow")
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow
 				beltr = /obj/item/quiver/arrows
 				beltl = /obj/item/rogueweapon/mace/goden/steel
+				H.adjust_skillrank_up_to(/datum/skill/combat/maces, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_EXPERT, TRUE)
 			if("Sabre + Recurve Bow")
 				l_hand = /obj/item/rogueweapon/scabbard/sword
 				r_hand = /obj/item/rogueweapon/sword/sabre
 				beltr = /obj/item/quiver/arrows
 				beltl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_EXPERT, TRUE)
 			if("Lance + Kite Shield")
 				r_hand = /obj/item/rogueweapon/spear/lance
 				backl = /obj/item/rogueweapon/shield/tower/metal
-				H.adjust_skillrank_up_to(/datum/skill/combat/shields, 2, TRUE) // Let them skip dummy hitting
+				H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/shields, SKILL_LEVEL_JOURNEYMAN, TRUE)
 
 	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	pants = /obj/item/clothing/under/roguetown/chainlegs
@@ -380,7 +400,7 @@
 		STATKEY_SPD = 2
 	)
 	subclass_skills = list(
-		/datum/skill/combat/swords = SKILL_LEVEL_MASTER, //Swords and knives class.
+		/datum/skill/combat/swords = SKILL_LEVEL_EXPERT, //Swords and knives class.
 		/datum/skill/combat/knives = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/whipsflails = SKILL_LEVEL_JOURNEYMAN, //Whips can work as a light class weapon.
 		/datum/skill/combat/shields = SKILL_LEVEL_APPRENTICE,
@@ -415,30 +435,38 @@
 				beltl = /obj/item/rogueweapon/scabbard/sword
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow
 				beltr = /obj/item/quiver/arrows
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_EXPERT, TRUE)
 
 			if("Estoc + Recurve Bow")
 				r_hand = /obj/item/rogueweapon/estoc
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
 				beltr = /obj/item/quiver/arrows
 				beltl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_EXPERT, TRUE)
 
 			if("Sabre + Buckler")
 				beltl = /obj/item/rogueweapon/scabbard/sword
 				r_hand = /obj/item/rogueweapon/sword/sabre
 				backl = /obj/item/rogueweapon/shield/buckler
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_EXPERT, TRUE)
 
 			if("Whip + Crossbow")
 				beltl = /obj/item/rogueweapon/whip
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
 				beltr = /obj/item/quiver/bolts
+				H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/crossbows, SKILL_LEVEL_EXPERT, TRUE)
 
 			if("Greataxe + Sling")
-				H.adjust_skillrank(/datum/skill/combat/slings, 4, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/combat/axes, 4, TRUE)
 				r_hand = /obj/item/rogueweapon/greataxe/steel
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
 				beltr = /obj/item/quiver/sling/iron
 				beltl = /obj/item/gun/ballistic/revolver/grenadelauncher/sling
+				H.adjust_skillrank_up_to(/datum/skill/combat/axes, SKILL_LEVEL_MASTER, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/slings, SKILL_LEVEL_EXPERT, TRUE)
 
 		switch(armor_choice)
 			if("Light Armor")
