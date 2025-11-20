@@ -171,6 +171,9 @@
 	else
 		desc = "Polished gilbronze layers, magewelded into lightweight plate armor. It radiates raw strength, reinforcing the wearer's physical might."
 
+/obj/item/clothing/suit/roguetown/armor/plate/retinue
+	desc = "A Knight's plate cuirass made to the commissioner's size by the local armoursmiths."
+
 /obj/item/clothing/suit/roguetown/armor/plate/fluted
 	name = "fluted half-plate"
 	desc = "An ornate steel cuirass, fitted with tassets and pauldrons for additional coverage. This lightweight deviation of 'plate armor' is favored by cuirassiers all across Psydonia, alongside fledging barons who've - up until now - waged their fiercest battles upon a chamberpot."
